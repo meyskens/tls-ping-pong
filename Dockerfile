@@ -1,13 +1,13 @@
 FROM golang:1.14 as build
 
-COPY pingpong /go/src/github.com/jetstack/cert-manager-venafi-demo/pingpong
+COPY ./ /go/src/github.com/meyskens/tls-ping-pong
 
-WORKDIR /go/src/github.com/jetstack/cert-manager-venafi-demo/pingpong
+WORKDIR /go/src/github.com/meyskens/tls-ping-pong
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo ./
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o pingpong ./
 
 FROM alpine:3.11
 
-COPY --from=build /go/src/github.com/jetstack/cert-manager-venafi-demo/pingpong/pingpong /usr/local/bin/
+COPY --from=build /go/src/github.com/meyskens/tls-ping-pong/pingpong /usr/local/bin/
 
 ENTRYPOINT /usr/local/bin/pingpong
