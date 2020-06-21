@@ -48,7 +48,7 @@ type templateData struct {
 }
 
 var (
-	endpoint   string
+	peer       string
 	caFile     string
 	certFile   string
 	keyFile    string
@@ -56,14 +56,14 @@ var (
 )
 
 func main() {
-	flag.StringVar(&endpoint, "endpoint", "", "Endpoint to contact and get certificate info from, e.g. https://jetstack.io/")
+	flag.StringVar(&peer, "peer", "", "Peer's endpoint to contact and get certificate info from, e.g. https://jetstack.io/ping")
 	flag.StringVar(&caFile, "ca-file", "", "PEM file with the CA")
 	flag.StringVar(&certFile, "cert-file", "", "PEM file with the server certificate")
 	flag.StringVar(&keyFile, "key-file", "", "File with the server private key")
 	flag.Parse()
 
-	if endpoint == "" || caFile == "" || certFile == "" || keyFile == "" {
-		log.Fatal("Needs -endpoint, -ca-file, -cert-file and -key-file flags")
+	if peer == "" || caFile == "" || certFile == "" || keyFile == "" {
+		log.Fatal("Needs -peer, -ca-file, -cert-file and -key-file flags")
 	}
 
 	// watch the certificate file on disk
@@ -117,7 +117,7 @@ func serveRoot(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = tmpl.Execute(w, templateData{
-		Endpoint:      endpoint,
+		Endpoint:      peer,
 		ServerNames:   strings.Join(resp.TLS.PeerCertificates[0].DNSNames, ", "),
 		Issuer:        resp.TLS.PeerCertificates[0].Issuer.CommonName,
 		Serial:        resp.TLS.PeerCertificates[0].SerialNumber.String(),
@@ -152,7 +152,7 @@ func callServer() (*http.Response, error) {
 		},
 	}
 
-	return c.Get(endpoint)
+	return c.Get(peer)
 }
 
 // poor way to reload on cert renewal, works for this demo

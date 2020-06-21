@@ -49,7 +49,7 @@ spec:
           name: pingpong
           command:
             - /usr/local/bin/pingpong
-            - -endpoint=https://pong-service.default.svc.cluster.local:8443/ping
+            - -peer=https://pong-service.default.svc.cluster.local:8443/ping
             - -ca-file=/etc/ssl/private/ca.crt
             - -cert-file=/etc/ssl/private/tls.crt
             - -key-file=/etc/ssl/private/tls.key
@@ -89,7 +89,7 @@ spec:
           name: pingpong
           command:
             - /usr/local/bin/pingpong
-            - -endpoint=https://ping-service.default.svc.cluster.local:8443/ping
+            - -peer=https://ping-service.default.svc.cluster.local:8443/ping
             - -ca-file=/etc/ssl/private/ca.crt
             - -cert-file=/etc/ssl/private/tls.crt
             - -key-file=/etc/ssl/private/tls.key
